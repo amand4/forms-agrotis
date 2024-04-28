@@ -8,7 +8,7 @@ const Header = () => {
       style={{
         backgroundColor: '#FFFFFF',
         width: '100%',
-        height: '39.1px',
+        height: '40px',
         gap: '0px',
         opacity: '0.8',
         boxShadow: '0px 1px 3px 0px #00000042',
