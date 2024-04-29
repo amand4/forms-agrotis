@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+## Contact Manager App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+### About Project:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The project consists of building a simple form using React, where the objective is to follow a provided prototype. In addition to demonstrating my skills skills as a front end developer.
 
-## Expanding the ESLint configuration
+<img width="675" alt="form step 2 for entity legal" src="./screens/example.png">
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
+### Technologies
+Built using [React JS](https://pt-br.reactjs.org/) with [Vite JS](https://vitejs.dev/), this interface and the layout were made from scratch by me.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- [@emotion/react](https://www.npmjs.com/package/@emotion/react): ^11.11.4
+- [@emotion/styled](https://www.npmjs.com/package/@emotion/styled): ^11.11.5
+- [@mui/icons-material](https://www.npmjs.com/package/@mui/icons-material): ^5.15.15
+- [@mui/material](https://www.npmjs.com/package/@mui/material): ^5.15.15
+- [@mui/x-date-pickers](https://www.npmjs.com/package/@mui/x-date-pickers): ^7.3.1
+- [dayjs](https://www.npmjs.com/package/dayjs): ^1.11.10
+- [formik](https://www.npmjs.com/package/formik): ^2.4.6
+- [lodash.get](https://www.npmjs.com/package/lodash.get): ^4.4.2
+- [react](https://www.npmjs.com/package/react): ^18.2.0
+- [react-dom](https://www.npmjs.com/package/react-dom): ^18.2.0
+- [react-query](https://www.npmjs.com/package/react-query): ^3.39.3
+- [yup](https://www.npmjs.com/package/yup): ^1.4.0
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node 16 or 16^
+- Git 2
+
+### Install project
+
+```bash
+git clone git@github.com:amand4/forms-agrotis.git
+cd forms-agrotis
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Start project
+To start the project, run the following command:
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173 to view it in the browser.
+
