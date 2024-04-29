@@ -1,11 +1,11 @@
-## Contact Manager App
+## Test Front-End
 
 
 ### About Project:
 
 The project consists of building a simple form using React, where the objective is to follow a provided prototype. In addition to demonstrating my skills skills as a front end developer.
 
-<img width="675" alt="form step 2 for entity legal" src="./screens/example.png">
+<img width="675" alt="registration screen" src="./screens/example.png">
 
 
 ### Technologies
