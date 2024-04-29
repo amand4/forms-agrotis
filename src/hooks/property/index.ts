@@ -9,6 +9,7 @@ const useProperty = () => {
     return data;
   });
 
+
   return {
     properties: propertiesQuery.data,
     propertiesLoading: propertiesQuery.isLoading,

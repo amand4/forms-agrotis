@@ -4,7 +4,7 @@ import { LaboratoryProps } from '../../interfaces';
 
 const useLaboratory = () => {
 
-  const laboratoriesQuery = useQuery<LaboratoryProps[]>('properties', async (): Promise<LaboratoryProps[]> => {
+  const laboratoriesQuery = useQuery<LaboratoryProps[]>('laboratories', async (): Promise<LaboratoryProps[]> => {
     const data = await laboratoryServices.get();
     return data
   });
