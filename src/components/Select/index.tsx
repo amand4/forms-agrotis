@@ -1,12 +1,12 @@
 import React from 'react';
-import { MenuItem, Select, InputLabel, FormControl, FormHelperText, SelectChangeEvent } from '@mui/material';
+import { MenuItem, Select, Box, InputLabel, FormControl, FormHelperText, SelectChangeEvent, Typography } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { selectLabelStyles, componentErrorTextStyles } from './styles';
-import { LaboratoryProps, PropertyProps } from '../../interfaces';
+import { SelectOptionsProps } from '../FormRegister';
 
 interface SelectInputProps {
   fieldName: string;
-  options?: LaboratoryProps[] | PropertyProps[];
+  options?: SelectOptionsProps[];
   onChange: (event: SelectChangeEvent<string>) => void;
   onBlur: () => void;
   errors?: string | undefined
@@ -38,11 +38,21 @@ const SelectInput: React.FC<SelectInputProps> = ({
         variant="standard"
         name={fieldName}
         value={value}
+        renderValue={(selected) => {
+          const selectedItem = options?.find((item) => item.id === selected);
+          return (
+            <div>
+              <Typography>{selectedItem?.nome}</Typography>
+            </div>
+          );
+        }}
       >
-        <MenuItem value="">{placeholder}</MenuItem>
-        {options?.map((item, index) => (
+        {options?.map((item: SelectOptionsProps, index: number) => (
           <MenuItem key={item.id || index} value={item.id}>
-            {item.nome}
+            <Box>
+              <Typography>{item.nome}</Typography>
+              <Typography variant="subtitle1">{item?.cnpj}</Typography>
+            </Box>
           </MenuItem>
         ))}
       </Select>

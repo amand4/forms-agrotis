@@ -24,3 +24,9 @@ export interface PropertyProps {
   nome: string;
   cnpj: string;
 }
+
+export interface SelectOpstionsProps {
+  id: string;
+  nome: string;
+  cnpj?: string;
+}
