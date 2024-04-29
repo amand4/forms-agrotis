@@ -1,6 +1,6 @@
 import { LaboratoryProps } from '../../../interfaces';
 
-const get = async (): Promise<LaboratoryProps> => {
+const get = async (): Promise<LaboratoryProps[]> => {
   try {
     const response = await fetch('https://bitbucket.org/agrotis/teste-rh/raw/3bc797776e54586552d1c9666fd7c13366fc9548/teste-front-end-1/laboratorios.json');
     const data = await response.json();
