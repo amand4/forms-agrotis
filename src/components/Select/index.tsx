@@ -1,7 +1,7 @@
-import React from 'react';
 import { string, func, any, bool, array } from 'prop-types';
-import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import _get from 'lodash/get';
+import { MenuItem, Select, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import WarningIcon from '@mui/icons-material/Warning';
+import { selectLabelStyles, componentErrorTextStyles } from './styles';
 
 const SelectInput = ({
   fieldName,
@@ -9,18 +9,17 @@ const SelectInput = ({
   onChange,
   onBlur,
   errors,
-  touched,
   label,
   placeholder,
   value,
   ...rest
 }) => {
-  const isTouched = _get(touched, fieldName);
-  const hasErrors = _get(errors, fieldName);
+
+  const hasErrors = Boolean(errors)
 
   return (
-    <FormControl fullWidth>
-      <InputLabel>{label}</InputLabel>
+    <FormControl fullWidth error={hasErrors}>
+      <InputLabel sx={selectLabelStyles}>{label}</InputLabel>
       <Select
         label={label}
         onChange={onChange}
@@ -31,11 +30,14 @@ const SelectInput = ({
         value={value}
       >
         <MenuItem value="">{placeholder}</MenuItem>
-        {options?.map((item) => (
-          <MenuItem key={item.id} value={item.id }>{item.nome}</MenuItem>
+        {options?.map((item, index) => (
+          <MenuItem key={item.id || index} value={item.id}>
+            {item.nome}
+          </MenuItem>
         ))}
       </Select>
-    </FormControl>
+      {hasErrors && <FormHelperText sx={componentErrorTextStyles}>  <WarningIcon fontSize="inherit" /> Error </FormHelperText>}
+    </FormControl >
   );
 };
 
@@ -44,7 +46,6 @@ SelectInput.propTypes = {
   onChange: func.isRequired,
   onBlur: func.isRequired,
   errors: any,
-  touched: any,
   label: string,
   placeholder: string,
   options: array,
@@ -52,3 +53,12 @@ SelectInput.propTypes = {
 };
 
 export default SelectInput;
+
+
+// flex-direction: column;
+//justify-content: start;
+//align-items: start;
+//font-size: 9px
+//
+//<p > {item.nome}</p>
+//<p>  {item.id}</p>

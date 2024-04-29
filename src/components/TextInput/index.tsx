@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { string, func, any, bool, number } from 'prop-types';
-import { Box, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { string, func, bool, number, object } from 'prop-types';
+import {
+  FormControl, TextField, Typography, FormHelperText,
+  Box,
+  any,
+  InputLabel
+} from '@mui/material';
 import _get from 'lodash/get';
+import WarningIcon from '@mui/icons-material/Warning';
+import { textErrorStyles } from './styles';
 
 const TextInput = ({
   fieldName,
@@ -14,12 +21,10 @@ const TextInput = ({
   multiline,
   rows,
   placeholder,
+  style,
   ...rest
 }) => {
   const [charCount, setCharCount] = useState(_get(rest, 'value', '').length);
-
-  const isTouched = _get(touched, fieldName);
-  const hasErrors = _get(errors, fieldName);
 
   const handleChange = (event) => {
     const { value } = event.target;
@@ -27,8 +32,10 @@ const TextInput = ({
     onChange(event);
   };
 
+  const hasErrors = touched && Boolean(errors)
+
   return (
-    <Box>
+    <FormControl fullWidth >
       <TextField
         fullWidth
         autoFocus={autoFocus}
@@ -37,20 +44,22 @@ const TextInput = ({
         value={rest.value}
         onChange={handleChange}
         onBlur={onBlur}
-        helperText={(isTouched || hasErrors) && hasErrors}
-        error={(isTouched || hasErrors) && Boolean(hasErrors)}
+        error={touched && Boolean(errors)}
         variant="standard"
         inputProps={{
           maxLength: maxCharacters,
         }}
         multiline={multiline}
         rows={rows}
-        placeholder={placeholder}
+        label={rest.label}
       />
+
+      {hasErrors && <FormHelperText sx={textErrorStyles} style={{...textErrorStyles}} color="error" id="component-error-text"> <WarningIcon fontSize="inherit" />Error</FormHelperText>}
       <Typography variant="body2" color="textSecondary" align="right">
         {charCount}/{maxCharacters}
       </Typography>
-    </Box>
+    </FormControl >
+
   );
 };
 
@@ -58,13 +67,14 @@ TextInput.propTypes = {
   fieldName: string.isRequired,
   onChange: func.isRequired,
   onBlur: func.isRequired,
-  errors: any,
-  touched: any,
+  errors: string,
+  touched: bool,
   autoFocus: bool,
   maxCharacters: number,
   multiline: bool,
   rows: number,
   placeholder: string,
+  style: object
 };
 
 export default TextInput;

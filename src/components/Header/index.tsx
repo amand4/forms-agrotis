@@ -5,6 +5,7 @@ import logo from '../../assets/images/logo-agrotis.png';
 const Header = () => {
   return (
     <AppBar
+      position="static"
       style={{
         backgroundColor: '#FFFFFF',
         width: '100%',

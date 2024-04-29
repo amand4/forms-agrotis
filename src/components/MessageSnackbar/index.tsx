@@ -3,6 +3,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@material-ui/icons/Check';
+
 
 const MessageSnackbar = ({ message, severity }) => {
   const [open, setOpen] = useState(false);
@@ -21,9 +23,14 @@ const MessageSnackbar = ({ message, severity }) => {
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+    <Snackbar open={open} onClose={handleClose}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}>
       <Alert
         onClose={handleClose}
+        variant="filled"
         severity={severity}
         sx={{ width: '100%' }}
         action={

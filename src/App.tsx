@@ -1,19 +1,19 @@
-import './App.css'
+import { Box, ThemeProvider } from '@mui/material'
+
 import FormRegister from './components/FormRegister'
 import Header from './components/Header'
-import { Box } from '@mui/material'
-import UserStorage from './contexts/useContext'
+import theme from './theme'
 
 function App() {
 
   return (
     <Box>
-      <Header />
-      <UserStorage>
+      <ThemeProvider theme={theme}>
+        <Header />
         <FormRegister />
-      </UserStorage>
+      </ThemeProvider>
     </Box>
   )
 }
 
-export default App
+export default App;
