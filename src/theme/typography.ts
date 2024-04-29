@@ -15,7 +15,8 @@ const typography = {
     letterSpacing: '-0.04px',
     lineHeight: '12px',
     fontWeight: '400',
-    margin: 0
+    margin: 0,
+    marginTop: '2px'
   }
 }
 export default typography

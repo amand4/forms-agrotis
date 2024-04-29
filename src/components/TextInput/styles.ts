@@ -5,6 +5,7 @@ export const textErrorStyles = {
   margin: 0,
   display: 'flex',
   alignItems: 'center',
-  fontSize: '12px'
+  fontSize: '12px',
+  color: 'error.main'
 };
 

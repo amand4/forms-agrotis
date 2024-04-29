@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, { useState, useEffect } from 'react';
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert, { AlertProps } from '@mui/material/Alert';
@@ -32,6 +34,7 @@ const MessageSnackbar: React.FC<MessageSnackbarProps> = ({ message, severity }) 
   return (
     <Snackbar
       open={open}
+      autoHideDuration={3000}
       onClose={handleClose}
       anchorOrigin={{
         vertical: 'bottom',

@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ChangeEvent, useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useFormik } from "formik";
@@ -8,7 +10,7 @@ import DatePickerInput from '../DatePicker';
 import MessageSnackbar from '../MessageSnackbar';
 import useLaboratory from '../../hooks/laboratory';
 import useProperty from '../../hooks/property';
-import { UserProps } from '../../interfaces';
+import { boxContainerStyles, cardContentGridCInputStyles, cardContentGridContainerStyles, cardHeaderBoxContentStyles, cardHeaderBoxStyles } from './styles';
 
 export interface SelectOptionsProps {
   id: string;
@@ -24,21 +26,6 @@ const FormRegister = () => {
     type: "",
     text: ""
   });
-
-  const handleSend = (values: UserProps) => {
-    setMessage({
-      type: "",
-      text: ""
-    });
-    setTimeout(() => {
-      if (Object.keys(errors).length === 0) {
-        setMessage({ type: "success", text: "Cadastro realizado com sucesso!" });
-        console.log(values);
-      } else {
-        setMessage({ type: "error", text: "Preencha os campos obragatórios." });
-      }
-    }, 1000);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -57,19 +44,35 @@ const FormRegister = () => {
       observacoes: ""
     },
     validationSchema: userSchema,
-    onSubmit: (values) => handleSend(values)
+    onSubmit: (values) => handleSubmit(values)
   });
 
   const {
     values,
     errors,
     touched,
+    resetForm,
     handleBlur,
     handleChange,
-    setFieldValue
+    setFieldValue,
+    handleSubmit
   } = formik;
 
-
+  const handleSend = () => {
+    setMessage({
+      type: "",
+      text: ""
+    });
+    setTimeout(() => {
+      if (Object.keys(errors).length === 0) {
+        setMessage({ type: "success", text: "Cadastro realizado com sucesso!" });
+        resetForm()
+        console.log("Dados prontos para serem enviados à API: ", values);
+      } else {
+        setMessage({ type: "error", text: "Preencha os campos obragatórios." });
+      }
+    }, 1000);
+  };
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>, options: SelectOptionsProps[]) => {
     const { name, value } = event.target;
@@ -79,24 +82,23 @@ const FormRegister = () => {
       if (selectedProperty.cnpj) {
         setFieldValue("cnpj", selectedProperty.cnpj);
       }
-
     }
-  }
+  };
 
   return (
     <>
-      <Box sx={{ padding: 4 }}>
+      <Box style={boxContainerStyles}>
         <Card>
-          <Box sx={{ display: "flex", justifyContent: "space-between", backgroundColor: (theme) => theme.palette.primary.main, padding: "10px" }}>
-            <CardHeader sx={{ padding: 0, color: (theme) => theme.palette.white }} title="Teste front-end" color="text.secondary" />
-            <Button type="button" variant="text" onClick={handleSend}>Salvar</Button>
+          <Box sx={cardHeaderBoxContentStyles}>
+            <CardHeader style={cardHeaderBoxStyles} title="Teste front-end" />
+            <Button type="submit" onClick={handleSend} variant="text">Salvar</Button>
           </Box>
           <CardContent>
             <Grid container>
-              <Grid item xs={12} justifyContent="center"
+              <Grid item xs={12}
+                justifyContent="center"
                 alignItems="center">
-
-                <Grid container gap={2} sx={{ flexWrap: 'nowrap' }}>
+                <Grid container gap={2} sx={cardContentGridContainerStyles}>
                   <Grid item xs={6} >
                     <TextInput
                       autoFocus
@@ -109,17 +111,17 @@ const FormRegister = () => {
                       maxCharacters={60}
                       placeholder="Nome*"
                       touched={touched.nome}
-                      multiline={undefined} rows={undefined}
                     />
                   </Grid>
                   <Grid item xs={6}>
-                    <Box gap={2} sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Box gap={2} sx={cardContentGridCInputStyles}>
                       <DatePickerInput
                         onChange={(date) => handleChange({ target: { name: 'dataInicial', value: date.toISOString() } })}
                         label="Data Inicial*"
                         value={values.dataInicial}
                         fieldName="dataInicial"
                         errors={errors.dataInicial}
+                        touched={touched.dataFinal}
                       />
                       <DatePickerInput
                         onChange={(date) => handleChange({ target: { name: 'dataFinal', value: date.toISOString() } })}
@@ -135,9 +137,8 @@ const FormRegister = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
-              <Grid item xs={12} sx={{ marginTop: 2 }}>
-                <Grid container gap={2} sx={{ flexWrap: 'nowrap' }}>
+              <Grid item xs={12} sx={{ marginTop: 1 }}>
+                <Grid container gap={2} sx={cardContentGridContainerStyles}>
                   <Grid item xs={6}>
                     <Box>
                       <SelectInput
@@ -168,7 +169,6 @@ const FormRegister = () => {
                   </Grid>
                 </Grid>
               </Grid>
-
               <Grid item xs={12}>
                 <TextInput
                   onChange={handleChange}
@@ -188,8 +188,7 @@ const FormRegister = () => {
       </Box >
       {message.text && (
         <MessageSnackbar message={message?.text} severity={message?.type} />
-      )
-      }
+      )}
     </>
   );
 };

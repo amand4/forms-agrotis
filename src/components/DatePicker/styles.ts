@@ -2,7 +2,6 @@ export const containerDateStyles = {
   minHeight: '67.91px'
 };
 
-
 export const textErrorStyles = {
   fontSize: '16px'
 };
