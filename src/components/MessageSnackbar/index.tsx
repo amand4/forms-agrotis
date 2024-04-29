@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import React, { useState, useEffect } from 'react';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert, { AlertProps } from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@material-ui/icons/Check';
+import CheckIcon from '@mui/icons-material/Check';
+import WarningIcon from '@mui/icons-material/Warning';
 
+interface MessageSnackbarProps {
+  message: string;
+  severity: AlertProps['severity'];
+}
 
-const MessageSnackbar = ({ message, severity }) => {
+const MessageSnackbar: React.FC<MessageSnackbarProps> = ({ message, severity }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -15,19 +20,24 @@ const MessageSnackbar = ({ message, severity }) => {
     }
   }, [message]);
 
-  const handleClose = (event, reason) => {
+  const handleClose = (event: React.SyntheticEvent | MouseEvent<Element, MouseEvent>, reason: SnackbarCloseReason) => {
     if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
   };
 
+  const icon = severity === 'success' ? <CheckIcon /> : <WarningIcon />;
+
   return (
-    <Snackbar open={open} onClose={handleClose}
+    <Snackbar
+      open={open}
+      onClose={handleClose}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center',
-      }}>
+      }}
+    >
       <Alert
         onClose={handleClose}
         variant="filled"
@@ -36,13 +46,13 @@ const MessageSnackbar = ({ message, severity }) => {
         action={
           <IconButton
             size="small"
-            aria-label="Fechar"
             color="inherit"
             onClick={handleClose}
           >
             <CloseIcon fontSize="small" />
           </IconButton>
         }
+        icon={icon}
       >
         {message}
       </Alert>

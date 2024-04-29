@@ -1,39 +1,63 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Box, Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useFormik } from "formik";
-import { useUserContext } from '../../contexts/useContext';
 import userSchema from './schemas';
-import useUserForm from '../../hooks/useUserForm';
 import TextInput from '../TextInput';
 import SelectInput from '../Select';
 import DatePickerInput from '../DatePicker';
 import MessageSnackbar from '../MessageSnackbar';
 import useLaboratory from '../../hooks/laboratory';
 import useProperty from '../../hooks/property';
+import { UserProps } from '../../interfaces';
+
+export interface SelectOptionsProps {
+  id: string;
+  nome: string;
+  cnpj?: string;
+}
 
 const FormRegister = () => {
   const { laboratories } = useLaboratory();
   const { properties } = useProperty();
 
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState({
+    type: "",
+    text: ""
+  });
+
+  const handleSend = (values: UserProps) => {
+    setMessage({
+      type: "",
+      text: ""
+    });
+    setTimeout(() => {
+      if (Object.keys(errors).length === 0) {
+        setMessage({ type: "success", text: "Cadastro realizado com sucesso!" });
+        console.log(values);
+      } else {
+        setMessage({ type: "error", text: "Preencha os campos obragatórios." });
+      }
+    }, 1000);
+  };
 
   const formik = useFormik({
     initialValues: {
       nome: "",
       dataInicial: null,
       dataFinal: null,
+      cnpj: "",
       infosPropriedade: {
         id: "",
         nome: "",
       },
       laboratorio: {
         id: "",
-        name: "",
+        nome: "",
       },
       observacoes: ""
     },
     validationSchema: userSchema,
-    onSubmit: (values) => handleSubmit(values)
+    onSubmit: (values) => handleSend(values)
   });
 
   const {
@@ -42,33 +66,22 @@ const FormRegister = () => {
     touched,
     handleBlur,
     handleChange,
-    handleSubmit,
     setFieldValue
   } = formik;
 
-  const handleSend = () => {
-    setMessage(null);
-    setTimeout(() => {
-      if (Object.keys(errors).length === 0) {
-        setMessage({ type: "success", message: "Cadastro realizado com sucesso!" });
-        //toSendData(values);
-      } else {
-        setMessage({ type: "error", message: "Preencha os campos obragatórios." });
-      }
-    }, 1000);
-  };
 
-  const handleSelectChange = (event, options) => {
+
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>, options: SelectOptionsProps[]) => {
     const { name, value } = event.target;
-    const selectedProperty = options.find(option => option.id === value);
+    const selectedProperty = options.find((option: SelectOptionsProps) => option.id === value);
     if (selectedProperty) {
       setFieldValue(name, selectedProperty);
       if (selectedProperty.cnpj) {
         setFieldValue("cnpj", selectedProperty.cnpj);
       }
+
     }
-  };
-  //style={[{},]}
+  }
 
   return (
     <>
@@ -93,7 +106,6 @@ const FormRegister = () => {
                       value={values.nome}
                       fieldName="nome"
                       errors={errors.nome}
-                      variant="standard"
                       maxCharacters={60}
                       placeholder="Nome*"
                       touched={touched.nome}
@@ -106,19 +118,15 @@ const FormRegister = () => {
                         onChange={(date) => handleChange({ target: { name: 'dataInicial', value: date.toISOString() } })}
                         label="Data Inicial*"
                         value={values.dataInicial}
-                        onBlur={handleBlur}
                         fieldName="dataInicial"
                         errors={errors.dataInicial}
-                        touched={touched.dataInicial}
                       />
                       <DatePickerInput
                         onChange={(date) => handleChange({ target: { name: 'dataFinal', value: date.toISOString() } })}
                         label="Data Final*"
                         value={values.dataFinal}
-                        onBlur={handleBlur}
                         fieldName="dataFinal"
                         errors={errors.dataFinal}
-                        touched={touched.dataFinal}
                       />
                     </Box>
                     <Typography variant="subtitle1" align="right">
@@ -138,7 +146,7 @@ const FormRegister = () => {
                         onBlur={handleBlur}
                         value={values.infosPropriedade.id}
                         fieldName="infosPropriedade"
-                        options={laboratories}
+                        options={properties}
                         placeholder="Propriedades*"
                         errors={errors.infosPropriedade}
                       />
@@ -167,7 +175,6 @@ const FormRegister = () => {
                   onBlur={handleBlur}
                   value={values.observacoes}
                   fieldName="observacoes"
-                  variant="standard"
                   maxCharacters={1000}
                   multiline
                   placeholder="Observações"
@@ -179,8 +186,8 @@ const FormRegister = () => {
           </CardContent>
         </Card>
       </Box >
-      {message && (
-        <MessageSnackbar message={message?.message} severity={message?.type} />
+      {message.text && (
+        <MessageSnackbar message={message?.text} severity={message?.type} />
       )
       }
     </>
@@ -188,3 +195,4 @@ const FormRegister = () => {
 };
 
 export default FormRegister;
+

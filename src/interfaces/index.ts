@@ -1,7 +1,7 @@
 export interface UserProps {
   nome: string;
-  dataInicial: Date;
-  dataFinal: Date;
+  dataInicial: Date | null;
+  dataFinal: Date | null;
   cnpj: string;
   infosPropriedade: {
     id: string;

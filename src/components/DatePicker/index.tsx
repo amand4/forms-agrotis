@@ -1,23 +1,29 @@
-import { string, func, any, bool, object } from 'prop-types';
+import React from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { FormControl, FormHelperText } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { containerDateStyles, componentErrorTextStyles } from './styles';
 
-const DatePickerInput = ({
+interface DatePickerInputProps {
+  fieldName: string;
+  onChange: (date: Date | null) => void;
+  errors?: string | null;
+  label: string;
+  value: Date | null;
+}
+
+const DatePickerInput: React.FC<DatePickerInputProps> = ({
   fieldName,
   onChange,
-  onBlur,
   errors,
-  touched,
   label,
   value,
   ...rest
-}) => {
-  const hasErrors = Boolean(errors)
+}: DatePickerInputProps) => {
+  const hasErrors: boolean = Boolean(errors);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -26,27 +32,15 @@ const DatePickerInput = ({
           name={fieldName}
           label={label}
           value={value ? dayjs(value) : null}
-          onChange={onChange}
+          onChange={(newValue: Dayjs | null) => onChange(newValue ? newValue.toDate() : null)}
           sx={{ width: "100%" }}
           {...rest}
           slotProps={{ textField: { variant: "standard" } }}
         />
-        {hasErrors && <FormHelperText sx={componentErrorTextStyles}>  <WarningIcon fontSize="inherit" /> Error </FormHelperText>}
+        {hasErrors && <FormHelperText sx={componentErrorTextStyles}> <WarningIcon fontSize="inherit" /> Error </FormHelperText>}
       </FormControl >
     </LocalizationProvider >
   );
-};
-
-DatePickerInput.propTypes = {
-  className: string,
-  fieldName: string.isRequired,
-  label: string,
-  value: any,
-  onChange: func.isRequired,
-  onBlur: func.isRequired,
-  helperText: string,
-  errors: string,
-  touched: bool,
 };
 
 export default DatePickerInput;

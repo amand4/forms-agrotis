@@ -1,16 +1,27 @@
-import { useState } from 'react';
-import { string, func, bool, number, object } from 'prop-types';
+import React, { useState, ChangeEvent, FocusEvent } from 'react';
 import {
   FormControl, TextField, Typography, FormHelperText,
-  Box,
-  any,
-  InputLabel
 } from '@mui/material';
-import _get from 'lodash/get';
 import WarningIcon from '@mui/icons-material/Warning';
 import { textErrorStyles } from './styles';
 
-const TextInput = ({
+interface TextInputProps {
+  fieldName: string;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+  errors?: string | null;
+  touched?: boolean;
+  autoFocus?: boolean;
+  maxCharacters?: number;
+  multiline?: boolean;
+  rows?: number;
+  placeholder?: string;
+  style?: React.CSSProperties;
+  label?: string;
+  value: string;
+}
+
+const TextInput: React.FC<TextInputProps> = ({
   fieldName,
   onChange,
   onBlur,
@@ -21,30 +32,34 @@ const TextInput = ({
   multiline,
   rows,
   placeholder,
-  style,
+  value,
   ...rest
-}) => {
-  const [charCount, setCharCount] = useState(_get(rest, 'value', '').length);
+}: TextInputProps) => {
+  const [charCount, setCharCount] = useState(value.length);
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setCharCount(value.length);
     onChange(event);
   };
 
-  const hasErrors = touched && Boolean(errors)
+  const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
+    if (onBlur) onBlur(event);
+  };
+
+  const hasErrors = touched && Boolean(errors);
 
   return (
-    <FormControl fullWidth >
+    <FormControl fullWidth>
       <TextField
         fullWidth
         autoFocus={autoFocus}
         id={fieldName}
         name={fieldName}
-        value={rest.value}
+        value={value}
         onChange={handleChange}
-        onBlur={onBlur}
-        error={touched && Boolean(errors)}
+        onBlur={handleBlur}
+        error={hasErrors}
         variant="standard"
         inputProps={{
           maxLength: maxCharacters,
@@ -52,29 +67,17 @@ const TextInput = ({
         multiline={multiline}
         rows={rows}
         label={rest.label}
+        placeholder={placeholder}
+        {...rest}
       />
-
-      {hasErrors && <FormHelperText sx={textErrorStyles} style={{...textErrorStyles}} color="error" id="component-error-text"> <WarningIcon fontSize="inherit" />Error</FormHelperText>}
-      <Typography variant="body2" color="textSecondary" align="right">
-        {charCount}/{maxCharacters}
-      </Typography>
-    </FormControl >
-
+      {hasErrors && <FormHelperText sx={textErrorStyles} color="error" id="component-error-text"> <WarningIcon fontSize="inherit" /> Error</FormHelperText>}
+      {maxCharacters && (
+        <Typography variant="body2" color="textSecondary" align="right">
+          {charCount}/{maxCharacters}
+        </Typography>
+      )}
+    </FormControl>
   );
-};
-
-TextInput.propTypes = {
-  fieldName: string.isRequired,
-  onChange: func.isRequired,
-  onBlur: func.isRequired,
-  errors: string,
-  touched: bool,
-  autoFocus: bool,
-  maxCharacters: number,
-  multiline: bool,
-  rows: number,
-  placeholder: string,
-  style: object
 };
 
 export default TextInput;

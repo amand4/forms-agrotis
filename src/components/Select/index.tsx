@@ -1,9 +1,21 @@
-import { string, func, any, bool, array } from 'prop-types';
-import { MenuItem, Select, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import React from 'react';
+import { MenuItem, Select, InputLabel, FormControl, FormHelperText, SelectChangeEvent } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { selectLabelStyles, componentErrorTextStyles } from './styles';
+import { LaboratoryProps, PropertyProps } from '../../interfaces';
 
-const SelectInput = ({
+interface SelectInputProps {
+  fieldName: string;
+  options?: LaboratoryProps[] | PropertyProps[];
+  onChange: (event: SelectChangeEvent<string>) => void;
+  onBlur: () => void;
+  errors?: string | undefined
+  label: string;
+  placeholder: string;
+  value: string;
+}
+
+const SelectInput: React.FC<SelectInputProps> = ({
   fieldName,
   options,
   onChange,
@@ -12,10 +24,8 @@ const SelectInput = ({
   label,
   placeholder,
   value,
-  ...rest
-}) => {
-
-  const hasErrors = Boolean(errors)
+}: SelectInputProps) => {
+  const hasErrors: boolean = Boolean(errors);
 
   return (
     <FormControl fullWidth error={hasErrors}>
@@ -36,29 +46,9 @@ const SelectInput = ({
           </MenuItem>
         ))}
       </Select>
-      {hasErrors && <FormHelperText sx={componentErrorTextStyles}>  <WarningIcon fontSize="inherit" /> Error </FormHelperText>}
+      {hasErrors && <FormHelperText sx={componentErrorTextStyles}> <WarningIcon fontSize="inherit" /> Error </FormHelperText>}
     </FormControl >
   );
 };
 
-SelectInput.propTypes = {
-  fieldName: string.isRequired,
-  onChange: func.isRequired,
-  onBlur: func.isRequired,
-  errors: any,
-  label: string,
-  placeholder: string,
-  options: array,
-  value: any,
-};
-
 export default SelectInput;
-
-
-// flex-direction: column;
-//justify-content: start;
-//align-items: start;
-//font-size: 9px
-//
-//<p > {item.nome}</p>
-//<p>  {item.id}</p>
